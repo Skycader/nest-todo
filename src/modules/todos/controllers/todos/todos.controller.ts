@@ -1,7 +1,16 @@
-import { AddTodoDto } from './../../dtos/add-todo.dto';
-import { TodosService } from './../../../todos/services/todos/todos.service';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { TodoStatus } from './../../models/todo.model';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { Todo } from '../../models/todo.model';
+import { TodosService } from './../../../todos/services/todos/todos.service';
+import { AddTodoDto } from './../../dtos/add-todo.dto';
 
 @Controller('todos')
 export class TodosController {
@@ -13,14 +22,22 @@ export class TodosController {
   }
 
   @Get('/:id')
-  getTodoById(@Param('id') id: string ) {
-    return this.todosService.
+  getTodoById(@Param('id') id: string) {
+    return this.todosService.getTodoById(id);
   }
 
   @Post()
-  addTodo(
-    @Body() addTodoDto: AddTodoDto
-  ): Todo {
+  addTodo(@Body() addTodoDto: AddTodoDto): Todo {
     return this.todosService.addTodo(addTodoDto);
+  }
+
+  @Patch('/:id/status')
+  updateTodo(@Param('id') id: string, @Body('status') status: TodoStatus) {
+    return this.todosService.updateTodo(id, status);
+  }
+
+  @Delete('/:id')
+  removeTodo(@Param('id') id: string) {
+    return this.todosService.removeTodo(id);
   }
 }
