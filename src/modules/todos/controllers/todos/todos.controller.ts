@@ -22,7 +22,7 @@ export class TodosController {
   constructor(private todosService: TodosService) {}
 
   @Get()
-  getTodos(@Query() filterDto: GetTodosFilterDto): Todo[] {
+  getTodos(@Query(ValidationPipe) filterDto: GetTodosFilterDto): Todo[] {
     if (Object.keys(filterDto).length === 0) {
       return this.todosService.getAllTodos();
     } else {
