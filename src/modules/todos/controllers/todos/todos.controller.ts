@@ -1,3 +1,4 @@
+import { GetTodosFilterDto } from './../../dtos/get-todos-filter.dto';
 import { StatusValidatorPipe } from './../../pipes/status-validator/status-validator.pipe';
 import { TodoStatus } from './../../models/todo.model';
 import {
@@ -8,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -20,8 +22,12 @@ export class TodosController {
   constructor(private todosService: TodosService) {}
 
   @Get()
-  getAllTodos(): Todo[] {
-    return this.todosService.getAllTodos();
+  getTodos(@Query() filterDto: GetTodosFilterDto): Todo[] {
+    if (Object.keys(filterDto).length === 0) {
+      return this.todosService.getAllTodos();
+    } else {
+      return this.todosService.getTodosWithFilters(filterDto);
+    }
   }
 
   @Get('/:id')
