@@ -5,10 +5,7 @@ import {
 } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { AddTodoDto } from '../../dtos/add-todo.dto';
-import {
-  Todo,
-  TodoStatus,
-} from '../../models/todo.model';
+import { Todo, TodoStatus } from '../../models/todo.model';
 @Injectable()
 export class TodosService {
   private todos: Todo[] = [];
@@ -41,9 +38,7 @@ export class TodosService {
   }
 
   getTodoById(id: string) {
-    const found = this.todos.find(
-      (todo) => todo.id == id,
-    );
+    const found = this.todos.find((todo) => todo.id == id);
     if (!found) {
       throw new NotFoundException(
         `Todo with such id ${id} not found`,
@@ -65,10 +60,7 @@ export class TodosService {
     return todo;
   }
 
-  updateTodo(
-    id: string,
-    status: TodoStatus,
-  ): Todo {
+  updateTodo(id: string, status: TodoStatus): Todo {
     const todo = this.getTodoById(id);
     todo.status = status;
     return todo;
