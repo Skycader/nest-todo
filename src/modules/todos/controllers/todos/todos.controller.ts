@@ -19,7 +19,7 @@ import { AddTodoDto } from './../../dtos/add-todo.dto';
 
 @Controller('todos')
 export class TodosController {
-  constructor(private todosService: TodosService) {}
+  constructor(private todosService: TodosService) { }
 
   @Get()
   getTodos(@Query(ValidationPipe) filterDto: GetTodosFilterDto): Todo[] {
