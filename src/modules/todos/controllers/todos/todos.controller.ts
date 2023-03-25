@@ -21,6 +21,16 @@ import { AddTodoDto } from './../../dtos/add-todo.dto';
 export class TodosController {
   constructor(private todosService: TodosService) { }
 
+  @Get('/:id')
+  getTodoById(@Param('id') id: number) {
+    return this.todosService.getTodoById(id);
+  }
+  @Post()
+  @UsePipes(ValidationPipe)
+  addTodo(@Body() addTodoDto: AddTodoDto) {
+    return this.todosService.addTodo(addTodoDto);
+  }
+  /*
   @Get()
   getTodos(@Query(ValidationPipe) filterDto: GetTodosFilterDto): Todo[] {
     if (Object.keys(filterDto).length === 0) {
@@ -53,4 +63,5 @@ export class TodosController {
   removeTodo(@Param('id') id: string) {
     return this.todosService.removeTodo(id);
   }
+  */
 }

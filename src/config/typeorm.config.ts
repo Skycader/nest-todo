@@ -1,4 +1,5 @@
-import { TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { Todo } from 'src/modules/todos/controllers/todos/todos.entity';
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -7,6 +8,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   username: 'bob',
   password: 'bob',
   database: 'bobdb',
-  entities: [__dirname + '/../**/*.entity.ts'],
-  synchronize: true
-}
+  //entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  entities: [Todo],
+  synchronize: true,
+};

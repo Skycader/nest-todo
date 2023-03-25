@@ -3,13 +3,45 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
 import { AddTodoDto } from '../../dtos/add-todo.dto';
-import { Todo, TodoStatus } from '../../models/todo.model';
+import { TodoStatus } from '../../models/todo.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Todo } from '../../controllers/todos/todos.entity';
+import { TodosRepository } from '../../controllers/todos/todos.repository';
 @Injectable()
 export class TodosService {
-  private todos: Todo[] = [];
+  // private todos: Todo[] = [];
 
+  constructor(
+    @InjectRepository(Todo)
+    private todosRepository: Repository<Todo>,
+  ) { }
+  async getTodoById(id: number): Promise<Todo> {
+    const found = await this.todosRepository.findOne({
+      where: { id: id },
+    });
+    if (!found) {
+      throw new NotFoundException(
+        `Todo with id ${id} not found`,
+      );
+    }
+
+    return found;
+  }
+
+  async addTodo(addTodoDto: AddTodoDto) {
+    const { title, description } = addTodoDto;
+
+    const todo = new Todo();
+    todo.title = title;
+    todo.description = description;
+    todo.status = TodoStatus.OPEN;
+    await todo.save();
+    return todo;
+  }
+
+  /*
   getAllTodos(): Todo[] {
     return this.todos;
   }
@@ -73,4 +105,5 @@ export class TodosService {
     );
     return `Todo by id ${id} has been deleted`;
   }
+  */
 }
