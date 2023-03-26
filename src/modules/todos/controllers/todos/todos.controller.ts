@@ -7,6 +7,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -16,6 +17,7 @@ import {
 import { Todo } from '../../models/todo.model';
 import { TodosService } from './../../../todos/services/todos/todos.service';
 import { AddTodoDto } from './../../dtos/add-todo.dto';
+import { DeleteResult } from 'typeorm';
 
 @Controller('todos')
 export class TodosController {
@@ -29,6 +31,13 @@ export class TodosController {
   @UsePipes(ValidationPipe)
   addTodo(@Body() addTodoDto: AddTodoDto) {
     return this.todosService.addTodo(addTodoDto);
+  }
+
+  @Delete('/:id')
+  removeTodo(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<DeleteResult> {
+    return this.todosService.removeTodoById(id);
   }
   /*
   @Get()
