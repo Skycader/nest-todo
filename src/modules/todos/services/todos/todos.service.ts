@@ -35,7 +35,14 @@ export class TodosService {
   }
 
   async removeTodoById(id: number) {
-    return await this.todosRepository.delete(id);
+    const result = await this.todosRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(
+        `Todo with id ${id} not found`,
+      );
+    }
+
+    return result;
   }
 
   /*
