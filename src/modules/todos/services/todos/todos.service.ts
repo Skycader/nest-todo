@@ -16,7 +16,7 @@ export class TodosService {
   constructor(
     @InjectRepository(Todo)
     private todosRepository: TodosRepository,
-  ) { }
+  ) {}
   async getTodoById(id: number): Promise<Todo> {
     const found = await this.todosRepository.findOne({
       where: { id: id },
@@ -45,6 +45,19 @@ export class TodosService {
     return result;
   }
 
+  async updateTodo(
+    id: number,
+    status: TodoStatus,
+  ): Promise<Todo> {
+    const todo = await this.getTodoById(id);
+    todo.status = status;
+    await todo.save();
+    return todo;
+  }
+
+  async getTodos(filterDto: GetTodosFilterDto) {
+    return this.todosRepository.getTodos(filterDto);
+  }
   /*
   getAllTodos(): Todo[] {
     return this.todos;

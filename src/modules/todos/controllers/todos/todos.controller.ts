@@ -21,7 +21,7 @@ import { DeleteResult } from 'typeorm';
 
 @Controller('todos')
 export class TodosController {
-  constructor(private todosService: TodosService) { }
+  constructor(private todosService: TodosService) {}
 
   @Get('/:id')
   getTodoById(@Param('id') id: number) {
@@ -38,6 +38,21 @@ export class TodosController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<DeleteResult> {
     return this.todosService.removeTodoById(id);
+  }
+
+  @Patch('/:id/status')
+  updateTodo(
+    @Param('id') id: number,
+    @Body('status', StatusValidatorPipe) status: TodoStatus,
+  ) {
+    return this.todosService.updateTodo(id, status);
+  }
+
+  @Get()
+  getTodos(
+    @Query(ValidationPipe) filterDto: GetTodosFilterDto,
+  ) {
+    return this.todosService.getTodos(filterDto);
   }
   /*
   @Get()
