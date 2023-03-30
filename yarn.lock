@@ -3645,9 +3645,9 @@ mkdirp@^0.5.4:
     minimist "^1.2.6"
 
 mkdirp@^2.1.3:
-  version "2.1.3"
-  resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-2.1.3.tgz"
-  integrity sha512-sjAkg21peAG9HS+Dkx7hlG9Ztx7HLeKnvB3NQRcu/mltCVmvkF0pisbiTSfDVYTT86XEfZrTUosLdZLStquZUw==
+  version "2.1.6"
+  resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-2.1.6.tgz"
+  integrity sha512-+hEnITedc8LAtIP9u3HJDFIdcLV2vXP33sqLLIzkv1Db1zO/1OxbvYf0Y1OC/S/Qo5dxHXepofhmxL02PsKe+A==
 
 ms@2.0.0:
   version "2.0.0"

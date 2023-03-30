@@ -12,11 +12,11 @@ import { TodosRepository } from '../../controllers/todos/todos.repository';
 @Injectable()
 export class TodosService {
   // private todos: Todo[] = [];
-
+  todos = new TodosRepository(this.todosRepository);
   constructor(
     @InjectRepository(Todo)
-    private todosRepository: TodosRepository,
-  ) {}
+    private todosRepository: Repository<Todo>,
+  ) { }
 
   async getTodoById(id: number): Promise<Todo> {
     const found = await this.todosRepository.findOne({
@@ -32,6 +32,7 @@ export class TodosService {
   }
 
   async addTodo(addTodoDto: AddTodoDto) {
+    return this.todos.addTodo(addTodoDto);
     //return this.todosRepository.addTodo(addTodoDto);
     const { title, description } = addTodoDto;
     const todo = new Todo();

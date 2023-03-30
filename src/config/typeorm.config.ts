@@ -9,7 +9,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   password: 'bob',
   database: 'bobdb',
   //entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  // entities: ['src/entity/*.ts', './build/src/entity/*.js'], // <- Here!
   entities: [Todo],
-  autoLoadEntities: true,
   synchronize: true,
 };

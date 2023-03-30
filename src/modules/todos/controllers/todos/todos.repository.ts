@@ -1,21 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import {
-  DataSource,
-  EntityRepository,
-  EntityTarget,
-  Repository,
-} from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { AddTodoDto } from '../../dtos/add-todo.dto';
 import { GetTodosFilterDto } from '../../dtos/get-todos-filter.dto';
 import { TodoStatus } from '../../models/todo.model';
 import { Todo } from './todos.entity';
 
-export class TodosRepository extends Repository<Todo> {
+@Injectable()
+export class TodosRepository {
+  constructor(
+    @InjectRepository(Todo)
+    private repository: Repository<Todo>,
+  ) {}
   async getTodos(
     filterDto: GetTodosFilterDto,
   ): Promise<Todo[]> {
     const { status, search } = filterDto;
-    const query = this.createQueryBuilder('todo');
+    const query =
+      this.repository.createQueryBuilder('todo');
 
     const todos = await query.getMany();
 
