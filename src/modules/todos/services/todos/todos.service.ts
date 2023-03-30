@@ -12,11 +12,9 @@ import { TodosRepository } from '../../controllers/todos/todos.repository';
 @Injectable()
 export class TodosService {
   // private todos: Todo[] = [];
-  todos = new TodosRepository(this.todosRepository);
   constructor(
-    @InjectRepository(Todo)
-    private todosRepository: Repository<Todo>,
-  ) { }
+    private readonly todosRepository: TodosRepository,
+  ) {}
 
   async getTodoById(id: number): Promise<Todo> {
     const found = await this.todosRepository.findOne({
@@ -32,7 +30,7 @@ export class TodosService {
   }
 
   async addTodo(addTodoDto: AddTodoDto) {
-    return this.todos.addTodo(addTodoDto);
+    return this.todosRepository.addTodo(addTodoDto);
     //return this.todosRepository.addTodo(addTodoDto);
     const { title, description } = addTodoDto;
     const todo = new Todo();
@@ -65,7 +63,7 @@ export class TodosService {
   }
 
   async getTodos(filterDto: GetTodosFilterDto) {
-    //return this.todosRepository.getTodos(filterDto);
+    return this.todosRepository.getTodos(filterDto);
     const { status, search } = filterDto;
     const query =
       this.todosRepository.createQueryBuilder('todo');

@@ -7,12 +7,18 @@ import { TodoStatus } from '../../models/todo.model';
 import { Todo } from './todos.entity';
 
 @Injectable()
-export class TodosRepository {
+export class TodosRepository extends Repository<Todo> {
   constructor(
     @InjectRepository(Todo)
     private repository: Repository<Todo>,
-  ) {}
-  async getTodos(
+  ) {
+    super(
+      repository.target,
+      repository.manager,
+      repository.queryRunner,
+    );
+  }
+  public async getTodos(
     filterDto: GetTodosFilterDto,
   ): Promise<Todo[]> {
     const { status, search } = filterDto;
@@ -23,7 +29,7 @@ export class TodosRepository {
 
     return todos;
   }
-  async addTodo(addTodoDto: AddTodoDto) {
+  public async addTodo(addTodoDto: AddTodoDto) {
     const { title, description } = addTodoDto;
     const todo = new Todo();
     todo.title = title;
