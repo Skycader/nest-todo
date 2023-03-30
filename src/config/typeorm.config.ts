@@ -10,5 +10,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   database: 'bobdb',
   //entities: [__dirname + '/../**/*.entity.{js,ts}'],
   entities: [Todo],
+  autoLoadEntities: true,
   synchronize: true,
 };

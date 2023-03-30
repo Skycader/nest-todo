@@ -17,6 +17,7 @@ export class TodosService {
     @InjectRepository(Todo)
     private todosRepository: TodosRepository,
   ) {}
+
   async getTodoById(id: number): Promise<Todo> {
     const found = await this.todosRepository.findOne({
       where: { id: id },
@@ -31,7 +32,14 @@ export class TodosService {
   }
 
   async addTodo(addTodoDto: AddTodoDto) {
-    return this.todosRepository.addTodo(addTodoDto);
+    //return this.todosRepository.addTodo(addTodoDto);
+    const { title, description } = addTodoDto;
+    const todo = new Todo();
+    todo.title = title;
+    todo.description = description;
+    todo.status = TodoStatus.OPEN;
+    await todo.save();
+    return todo;
   }
 
   async removeTodoById(id: number) {
@@ -56,7 +64,27 @@ export class TodosService {
   }
 
   async getTodos(filterDto: GetTodosFilterDto) {
-    return this.todosRepository.getTodos(filterDto);
+    //return this.todosRepository.getTodos(filterDto);
+    const { status, search } = filterDto;
+    const query =
+      this.todosRepository.createQueryBuilder('todo');
+
+    if (status) {
+      query.andWhere('todo.status = :status', { status });
+    }
+
+    if (search) {
+      query.andWhere(
+        'todo.title LIKE :search OR todo.description LIKE :search ',
+        { search: `%${search}%` },
+      );
+    }
+    const todos = await query.getMany();
+    if (todos.length === 0)
+      throw new NotFoundException(
+        'No todo with such filter',
+      );
+    return todos;
   }
   /*
   getAllTodos(): Todo[] {

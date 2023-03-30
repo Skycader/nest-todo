@@ -10,4 +10,4 @@ import { TodosService } from './services/todos/todos.service';
   controllers: [TodosController],
   providers: [TodosService],
 })
-export class TodosModule { }
+export class TodosModule {}

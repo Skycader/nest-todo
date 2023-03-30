@@ -1,10 +1,15 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import {
+  DataSource,
+  EntityRepository,
+  EntityTarget,
+  Repository,
+} from 'typeorm';
 import { AddTodoDto } from '../../dtos/add-todo.dto';
 import { GetTodosFilterDto } from '../../dtos/get-todos-filter.dto';
 import { TodoStatus } from '../../models/todo.model';
 import { Todo } from './todos.entity';
 
-@EntityRepository(Todo)
 export class TodosRepository extends Repository<Todo> {
   async getTodos(
     filterDto: GetTodosFilterDto,
