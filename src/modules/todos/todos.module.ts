@@ -8,7 +8,7 @@ import { TodosService } from './services/todos/todos.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Todo])],
   controllers: [TodosController],
-  providers: [TodosService],
-  exports: [TodosRepository]
+  providers: [TodosService, TodosRepository],
+  exports: [TodosRepository],
 })
-export class TodosModule { }
+export class TodosModule {}
