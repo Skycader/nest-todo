@@ -8,8 +8,8 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   username: 'bob',
   password: 'bob',
   database: 'bobdb',
-  //entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  entities: [__dirname + '/../**/*.entity.{js,ts}'],
   // entities: ['src/entity/*.ts', './build/src/entity/*.js'], // <- Here!
-  entities: [Todo],
+  // entities: [Todo],
   synchronize: true,
 };
