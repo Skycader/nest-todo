@@ -10,6 +10,9 @@ import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'upload'),
+    }),
     TypeOrmModule.forRoot(typeOrmConfig),
     TodosModule,
     FilesModule,
@@ -18,4 +21,4 @@ import { AuthModule } from './auth/auth.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

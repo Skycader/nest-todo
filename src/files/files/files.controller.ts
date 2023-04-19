@@ -1,11 +1,16 @@
 import {
   Controller,
+  Get,
+  NotFoundException,
   Post,
+  Res,
+  StreamableFile,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { writeFileSync } from 'fs';
+import { createReadStream, writeFileSync } from 'fs';
+import { join } from 'path';
 @Controller('files')
 export class FilesController {
   @Post('upload')
@@ -23,5 +28,17 @@ export class FilesController {
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
     writeFileSync('./upload/' + file.originalname, file.buffer)
+  }
+
+  @Get()
+  getFile(): StreamableFile {
+    console.log(join(process.cwd(), 'package.json'))
+    const file = createReadStream(join(process.cwd(), 'package.json'));
+
+    if (Math.random() > 0.5) {
+      return new StreamableFile(file);
+    } else {
+      throw new NotFoundException('404')
+    }
   }
 }
