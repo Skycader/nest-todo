@@ -1,7 +1,3 @@
-import { User } from './../../../../auth/user.entity';
-import { GetTodosFilterDto } from './../../dtos/get-todos-filter.dto';
-import { StatusValidatorPipe } from './../../pipes/status-validator/status-validator.pipe';
-import { TodoStatus } from './../../models/todo.model';
 import {
   Body,
   Controller,
@@ -16,12 +12,15 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { Todo } from '../../models/todo.model';
-import { TodosService } from './../../../todos/services/todos/todos.service';
-import { AddTodoDto } from './../../dtos/add-todo.dto';
-import { DeleteResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
+import { DeleteResult } from 'typeorm';
+import { User } from './../../../../auth/user.entity';
+import { TodosService } from './../../../todos/services/todos/todos.service';
+import { AddTodoDto } from './../../dtos/add-todo.dto';
+import { GetTodosFilterDto } from './../../dtos/get-todos-filter.dto';
+import { TodoStatus } from './../../models/todo.model';
+import { StatusValidatorPipe } from './../../pipes/status-validator/status-validator.pipe';
 
 @Controller('todos')
 @UseGuards(AuthGuard())
