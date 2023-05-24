@@ -1,5 +1,13 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Todo } from 'src/modules/todos/controllers/todos/todos.entity';
 
 @Entity()
 @Unique(['username'])
@@ -8,15 +16,22 @@ export class User extends BaseEntity {
   id: number;
 
   @Column()
-  username: string
+  username: string;
 
   @Column()
-  password: string
+  password: string;
 
   @Column()
-  salt: string
+  salt: string;
 
-  async validatePassword(password: string): Promise<boolean> {
+  @OneToMany((type) => Todo, (todo) => todo.user, {
+    eager: true,
+  })
+  todos: Todo[];
+
+  async validatePassword(
+    password: string,
+  ): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
     return hash === this.password;
   }

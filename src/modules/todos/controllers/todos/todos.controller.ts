@@ -1,3 +1,4 @@
+import { User } from './../../../../auth/user.entity';
 import { GetTodosFilterDto } from './../../dtos/get-todos-filter.dto';
 import { StatusValidatorPipe } from './../../pipes/status-validator/status-validator.pipe';
 import { TodoStatus } from './../../models/todo.model';
@@ -11,6 +12,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -18,8 +20,11 @@ import { Todo } from '../../models/todo.model';
 import { TodosService } from './../../../todos/services/todos/todos.service';
 import { AddTodoDto } from './../../dtos/add-todo.dto';
 import { DeleteResult } from 'typeorm';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
 
 @Controller('todos')
+@UseGuards(AuthGuard())
 export class TodosController {
   constructor(private todosService: TodosService) {}
 
@@ -29,8 +34,11 @@ export class TodosController {
   }
   @Post()
   @UsePipes(ValidationPipe)
-  addTodo(@Body() addTodoDto: AddTodoDto) {
-    return this.todosService.addTodo(addTodoDto);
+  addTodo(
+    @Body() addTodoDto: AddTodoDto,
+    @GetUser() user: User,
+  ) {
+    return this.todosService.addTodo(addTodoDto, user);
   }
 
   @Delete('/:id')

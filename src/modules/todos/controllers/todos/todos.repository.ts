@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { AddTodoDto } from '../../dtos/add-todo.dto';
 import { GetTodosFilterDto } from '../../dtos/get-todos-filter.dto';
 import { TodoStatus } from '../../models/todo.model';
+import { User } from './../../../../auth/user.entity';
 import { Todo } from './todos.entity';
 
 @Injectable()
@@ -29,13 +30,17 @@ export class TodosRepository extends Repository<Todo> {
 
     return todos;
   }
-  public async addTodo(addTodoDto: AddTodoDto) {
+  public async addTodo(addTodoDto: AddTodoDto, user: User) {
     const { title, description } = addTodoDto;
     const todo = new Todo();
     todo.title = title;
     todo.description = description;
     todo.status = TodoStatus.OPEN;
+    todo.user = user;
+    console.log('USER');
+    console.log(user);
     await todo.save();
+    delete todo.user;
     return todo;
   }
 }

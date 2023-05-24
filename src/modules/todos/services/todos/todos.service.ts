@@ -1,3 +1,4 @@
+import { User } from './../../../../auth/user.entity';
 import { GetTodosFilterDto } from './../../dtos/get-todos-filter.dto';
 import {
   Injectable,
@@ -29,8 +30,8 @@ export class TodosService {
     return found;
   }
 
-  async addTodo(addTodoDto: AddTodoDto) {
-    return this.todosRepository.addTodo(addTodoDto);
+  async addTodo(addTodoDto: AddTodoDto, user: User) {
+    return this.todosRepository.addTodo(addTodoDto, user);
     //return this.todosRepository.addTodo(addTodoDto);
     const { title, description } = addTodoDto;
     const todo = new Todo();
