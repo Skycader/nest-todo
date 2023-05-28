@@ -28,8 +28,11 @@ export class TodosController {
   constructor(private todosService: TodosService) {}
 
   @Get('/:id')
-  getTodoById(@Param('id') id: number) {
-    return this.todosService.getTodoById(id);
+  getTodoById(
+    @Param('id') id: number,
+    @GetUser() user: User,
+  ) {
+    return this.todosService.getTodoById(id, user);
   }
   @Post()
   @UsePipes(ValidationPipe)
@@ -51,15 +54,17 @@ export class TodosController {
   updateTodo(
     @Param('id') id: number,
     @Body('status', StatusValidatorPipe) status: TodoStatus,
+    @GetUser() user: User,
   ) {
-    return this.todosService.updateTodo(id, status);
+    return this.todosService.updateTodo(id, status, user);
   }
 
   @Get()
   getTodos(
     @Query(ValidationPipe) filterDto: GetTodosFilterDto,
+    @GetUser() user: User,
   ) {
-    return this.todosService.getTodos(filterDto);
+    return this.todosService.getTodos(filterDto, user);
   }
   /*
   @Get()

@@ -21,11 +21,15 @@ export class TodosRepository extends Repository<Todo> {
   }
   public async getTodos(
     filterDto: GetTodosFilterDto,
+    user: User,
   ): Promise<Todo[]> {
     const { status, search } = filterDto;
     const query =
       this.repository.createQueryBuilder('todo');
 
+    query.where('todo.userId = :userId', {
+      userId: user.id,
+    });
     const todos = await query.getMany();
 
     return todos;
@@ -37,7 +41,7 @@ export class TodosRepository extends Repository<Todo> {
     todo.description = description;
     todo.status = TodoStatus.OPEN;
     todo.user = user;
-    console.log('USER');
+    // console.log('USER');
     console.log(user);
     await todo.save();
     delete todo.user;

@@ -25,7 +25,7 @@ export class AuthController {
     @Body(ValidationPipe)
     authCredentialsDto: AuthCredentialsDto,
   ) {
-    console.log(this.authService);
+    // console.log(this.authService);
     return this.authService.signUp(authCredentialsDto);
   }
 
@@ -40,6 +40,6 @@ export class AuthController {
   @Post('/test')
   @UseGuards(AuthGuard())
   test(@Req() req, @GetUser() user: User) {
-    console.log(user);
+    // console.log(user);
   }
 }

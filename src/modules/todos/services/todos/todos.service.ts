@@ -1,15 +1,13 @@
-import { User } from './../../../../auth/user.entity';
-import { GetTodosFilterDto } from './../../dtos/get-todos-filter.dto';
 import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { AddTodoDto } from '../../dtos/add-todo.dto';
-import { TodoStatus } from '../../models/todo.model';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Todo } from '../../controllers/todos/todos.entity';
 import { TodosRepository } from '../../controllers/todos/todos.repository';
+import { AddTodoDto } from '../../dtos/add-todo.dto';
+import { TodoStatus } from '../../models/todo.model';
+import { User } from './../../../../auth/user.entity';
+import { GetTodosFilterDto } from './../../dtos/get-todos-filter.dto';
 @Injectable()
 export class TodosService {
   // private todos: Todo[] = [];
@@ -17,9 +15,9 @@ export class TodosService {
     private readonly todosRepository: TodosRepository,
   ) {}
 
-  async getTodoById(id: number): Promise<Todo> {
+  async getTodoById(id: number, user: User): Promise<Todo> {
     const found = await this.todosRepository.findOne({
-      where: { id: id },
+      where: { id: id, userId: user.id },
     });
     if (!found) {
       throw new NotFoundException(
@@ -32,14 +30,6 @@ export class TodosService {
 
   async addTodo(addTodoDto: AddTodoDto, user: User) {
     return this.todosRepository.addTodo(addTodoDto, user);
-    //return this.todosRepository.addTodo(addTodoDto);
-    const { title, description } = addTodoDto;
-    const todo = new Todo();
-    todo.title = title;
-    todo.description = description;
-    todo.status = TodoStatus.OPEN;
-    await todo.save();
-    return todo;
   }
 
   async removeTodoById(id: number) {
@@ -56,35 +46,16 @@ export class TodosService {
   async updateTodo(
     id: number,
     status: TodoStatus,
+    user: User,
   ): Promise<Todo> {
-    const todo = await this.getTodoById(id);
+    const todo = await this.getTodoById(id, user);
     todo.status = status;
     await todo.save();
     return todo;
   }
 
-  async getTodos(filterDto: GetTodosFilterDto) {
-    return this.todosRepository.getTodos(filterDto);
-    const { status, search } = filterDto;
-    const query =
-      this.todosRepository.createQueryBuilder('todo');
-
-    if (status) {
-      query.andWhere('todo.status = :status', { status });
-    }
-
-    if (search) {
-      query.andWhere(
-        'todo.title LIKE :search OR todo.description LIKE :search ',
-        { search: `%${search}%` },
-      );
-    }
-    const todos = await query.getMany();
-    if (todos.length === 0)
-      throw new NotFoundException(
-        'No todo with such filter',
-      );
-    return todos;
+  async getTodos(filterDto: GetTodosFilterDto, user) {
+    return this.todosRepository.getTodos(filterDto, user);
   }
   /*
   getAllTodos(): Todo[] {
