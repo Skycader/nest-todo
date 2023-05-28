@@ -22,13 +22,13 @@ import { GetTodosFilterDto } from './../../dtos/get-todos-filter.dto';
 import { TodoStatus } from './../../models/todo.model';
 import { StatusValidatorPipe } from './../../pipes/status-validator/status-validator.pipe';
 
-@Controller('todos')
+@Controller('tasks')
 @UseGuards(AuthGuard())
 export class TodosController {
   constructor(private todosService: TodosService) {}
 
   @Get('/:id')
-  getTodoById(
+  getTaskById(
     @Param('id') id: number,
     @GetUser() user: User,
   ) {
@@ -36,7 +36,7 @@ export class TodosController {
   }
   @Post()
   @UsePipes(ValidationPipe)
-  addTodo(
+  addTask(
     @Body() addTodoDto: AddTodoDto,
     @GetUser() user: User,
   ) {
@@ -44,14 +44,15 @@ export class TodosController {
   }
 
   @Delete('/:id')
-  removeTodo(
+  removeTask(
     @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
   ): Promise<DeleteResult> {
-    return this.todosService.removeTodoById(id);
+    return this.todosService.removeTodoById(id, user);
   }
 
   @Patch('/:id/status')
-  updateTodo(
+  updateTask(
     @Param('id') id: number,
     @Body('status', StatusValidatorPipe) status: TodoStatus,
     @GetUser() user: User,
@@ -60,7 +61,7 @@ export class TodosController {
   }
 
   @Get()
-  getTodos(
+  getTasks(
     @Query(ValidationPipe) filterDto: GetTodosFilterDto,
     @GetUser() user: User,
   ) {

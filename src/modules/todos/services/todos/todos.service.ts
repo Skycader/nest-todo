@@ -32,8 +32,11 @@ export class TodosService {
     return this.todosRepository.addTodo(addTodoDto, user);
   }
 
-  async removeTodoById(id: number) {
-    const result = await this.todosRepository.delete(id);
+  async removeTodoById(id: number, user: User) {
+    const result = await this.todosRepository.delete({
+      id,
+      userId: user.id,
+    });
     if (result.affected === 0) {
       throw new NotFoundException(
         `Todo with id ${id} not found`,
@@ -54,7 +57,7 @@ export class TodosService {
     return todo;
   }
 
-  async getTodos(filterDto: GetTodosFilterDto, user) {
+  async getTodos(filterDto: GetTodosFilterDto, user: User) {
     return this.todosRepository.getTodos(filterDto, user);
   }
   /*
