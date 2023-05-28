@@ -30,6 +30,14 @@ export class TodosRepository extends Repository<Todo> {
     query.where('todo.userId = :userId', {
       userId: user.id,
     });
+
+    if (status)
+      query.andWhere('todo.status = :status', { status });
+    if (search)
+      query.andWhere(
+        'todo.title LIKE :search OR todo.description LIKE :search',
+        { search: `%${search}%` },
+      );
     const todos = await query.getMany();
 
     return todos;
